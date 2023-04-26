@@ -24,6 +24,7 @@ interface DesktopState {
   backgroundColor: BackgroundColor;
   showLinks: boolean;
   alignToGrid: boolean;
+  locked: boolean;
 }
 
 export const desktopState: DesktopState = reactive({
@@ -45,6 +46,7 @@ export const desktopState: DesktopState = reactive({
   },
   showLinks: true,
   alignToGrid: false,
+  locked: true,
 });
 
 // 桌面图标列表
@@ -67,5 +69,3 @@ export const links: LinkBase[] = reactive([
 
 // 需安装应用列表
 export const requestAppList = ["http://localhost:3000/Test.js"];
-
-

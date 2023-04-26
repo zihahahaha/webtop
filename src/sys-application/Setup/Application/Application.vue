@@ -7,6 +7,7 @@ const activeIndex = ref("application list");
 
 <template>
   <SelectorPanel
+    name="应用"
     v-model:index="activeIndex"
     class="customization"
     :menuOptions="[
@@ -17,7 +18,7 @@ const activeIndex = ref("application list");
       },
     ]"
   >
-      <AppList v-if="activeIndex === 'application list'"/>
+    <AppList v-if="activeIndex === 'application list'" />
   </SelectorPanel>
 </template>
 

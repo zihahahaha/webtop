@@ -1,18 +1,11 @@
 import type { Component } from "vue";
 import { reactive } from "vue";
+import type { Application } from "./type";
 
 import { createApp } from "vue";
 import App from "./App.vue";
 const app = createApp(App);
 export default app;
-
-interface Application {
-  register_name?: string;
-  appliaction_name: string;
-  icon?: string;
-  singleton: boolean;
-  component: Component;
-}
 
 interface SysApplication {
   register_name: string;
@@ -66,6 +59,7 @@ interface installedApplication {
   icon: Application["icon"];
   application_name: Application["appliaction_name"];
   register_name: Application["register_name"];
+  detail?: Application["detail"];
   url: string;
 }
 
@@ -91,6 +85,7 @@ export async function installApp(url: string): Promise<boolean> {
       register_name: application.register_name
         ? application.register_name
         : url,
+      detail: application.detail,
       url,
     });
     app.component(application.register_name, application.component);

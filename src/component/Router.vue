@@ -14,7 +14,8 @@ const history: string[] = [];
 watch(
   () => props.index,
   (value, oldValue) => {
-    if (value === history[history.length - 1]) history.pop();
+    if (value === history[history.length - 1] && toFlag === false)
+      history.pop();
     else {
       if (history.length < props.max && oldValue) {
         history.push(oldValue);
@@ -24,14 +25,21 @@ watch(
         }
         history[props.max - 1] = oldValue;
       }
+      toFlag = false;
     }
   }
 );
+let toFlag = false;
+function to(index: string) {
+  toFlag = true;
+  emit("update:index", index);
+}
 function back() {
   if (history.length != 0) emit("update:index", history[history.length - 1]);
 }
 defineExpose({
   back,
+  to,
 });
 </script>
 

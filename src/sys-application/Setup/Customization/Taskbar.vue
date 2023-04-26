@@ -7,7 +7,6 @@ import { NSwitch, NConfigProvider } from "naive-ui";
 
 <template>
   <div class="taskbar">
-    <div class="h">任务栏</div>
     <div class="p">锁定任务栏</div>
     <NConfigProvider preflight-style-disabled>
       <NSwitch v-model:value="desktopState.taskbarLock" size="small" />

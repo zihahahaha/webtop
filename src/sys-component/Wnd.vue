@@ -1,8 +1,21 @@
 <script setup lang="ts">
-import { toRef, ref, resolveComponent, provide, computed } from "vue";
+import {
+  toRef,
+  ref,
+  resolveComponent,
+  provide,
+  computed,
+  watch,
+  watchEffect,
+} from "vue";
 import type { InjectionKey, Ref } from "vue";
-import { maskFlag } from "@/global";
+import {
+  maskFlag as desktopMaskFlag,
+  width as desktopWidth,
+  height as desktopHeight,
+} from "@/global";
 import type { WndBase } from "@/type";
+import { desktopState } from "@/store";
 
 const { wnd } = defineProps<{
   wnd: WndBase;
@@ -12,6 +25,8 @@ const borderWidth = computed(() => {
   if (wnd.border.flag) return wnd.border.width;
   else return 0;
 });
+
+// 可读写
 provide("width", toRef(wnd, "width"));
 provide("height", toRef(wnd, "height"));
 provide("x", toRef(wnd, "x"));
@@ -21,9 +36,26 @@ provide("icon", toRef(wnd, "icon"));
 provide("titleBar", wnd.titleBar);
 provide("border", wnd.border);
 provide("mode", toRef(wnd, "mode"));
+const maskFlag = ref(false);
+provide("maskFlag", maskFlag);
+
+// 只读
 provide("init", wnd.init);
-const maskRef = ref();
-provide("maskRef", maskRef);
+const readonlyWidth = ref(wnd.width);
+const readonlyHeight = ref(wnd.height);
+watchEffect(() => {
+  if (wnd.mode === "maximum") {
+    readonlyWidth.value = desktopWidth.value;
+    readonlyHeight.value = desktopWidth.value;
+  } else if (wnd.mode === "windowed") {
+    readonlyWidth.value = wnd.width;
+    readonlyHeight.value = wnd.height;
+  }
+});
+provide("readonlyWidth", readonlyWidth);
+provide("readonlyHeight", readonlyHeight);
+
+// 方法
 function close() {
   emit("close");
 }
@@ -41,13 +73,17 @@ provide("maximize", maximize);
 provide("minimize", minimize);
 provide("windowize", windowize);
 
+//Ref
+const maskRef = ref();
+provide("maskRef", maskRef);
+
 const emit = defineEmits(["minimize", "maximize", "close", "windowize"]);
 const Client = resolveComponent(wnd.aid);
 const wndRef = ref();
 const btnBarRef = ref();
 
 const minWidth = 100;
-const minHeight = 300;
+const minHeight = 0;
 
 // 用户全屏拖拽功能
 function onDragStart(e: MouseEvent) {
@@ -69,7 +105,7 @@ function onDragStart(e: MouseEvent) {
         rect.x -
         (wnd.width - 2 * borderWidth.value - btnBarRef.value.offsetWidth) -
         1;
-    else init_x = e.clientX - rect.x - offsetX - borderWidth.value;
+    else init_x = Math.floor(e.clientX - rect.x - offsetX - borderWidth.value);
     init_y = 0;
   }
   const init_mouse_x = e.pageX;
@@ -134,51 +170,51 @@ function dragRight(init_mouse_x: number, init_width: number) {
 }
 function onResizeTop(e: MouseEvent) {
   e.preventDefault();
-  maskFlag.value = true;
+  desktopMaskFlag.value = true;
   let onDrag = dragTop(e.pageY, wnd.height, wnd.y);
   window.addEventListener("mousemove", onDrag);
   window.addEventListener("mouseup", function xxx() {
-    maskFlag.value = false;
+    desktopMaskFlag.value = false;
     window.removeEventListener("mousemove", onDrag);
     window.removeEventListener("mouseup", xxx);
   });
 }
 function onResizeBottom(e: MouseEvent) {
   e.preventDefault();
-  maskFlag.value = true;
+  desktopMaskFlag.value = true;
   let onDrag = dragBottom(e.pageY, wnd.height);
   window.addEventListener("mousemove", onDrag);
   window.addEventListener("mouseup", function xxx() {
-    maskFlag.value = false;
+    desktopMaskFlag.value = false;
     window.removeEventListener("mousemove", onDrag);
     window.removeEventListener("mouseup", xxx);
   });
 }
 function onResizeLeft(e: MouseEvent) {
   e.preventDefault();
-  maskFlag.value = true;
+  desktopMaskFlag.value = true;
   let onDrag = dragLeft(e.pageX, wnd.width, wnd.x);
   window.addEventListener("mousemove", onDrag);
   window.addEventListener("mouseup", function xxx() {
-    maskFlag.value = false;
+    desktopMaskFlag.value = false;
     window.removeEventListener("mousemove", onDrag);
     window.removeEventListener("mousedown", xxx);
   });
 }
 function onResizeRight(e: MouseEvent) {
   e.preventDefault();
-  maskFlag.value = true;
+  desktopMaskFlag.value = true;
   let onDrag = dragRight(e.pageX, wnd.width);
   window.addEventListener("mousemove", onDrag);
   window.addEventListener("mouseup", function xxx() {
-    maskFlag.value = false;
+    desktopMaskFlag.value = false;
     window.removeEventListener("mousemove", onDrag);
     window.removeEventListener("mousedown", xxx);
   });
 }
 function onResizeTL(e: MouseEvent) {
   e.preventDefault();
-  maskFlag.value = true;
+  desktopMaskFlag.value = true;
   let T = dragTop(e.pageY, wnd.height, wnd.y);
   let L = dragLeft(e.pageX, wnd.width, wnd.x);
   function onDrag(e: MouseEvent) {
@@ -187,14 +223,14 @@ function onResizeTL(e: MouseEvent) {
   }
   window.addEventListener("mousemove", onDrag);
   window.addEventListener("mouseup", function xxx() {
-    maskFlag.value = false;
+    desktopMaskFlag.value = false;
     window.removeEventListener("mousemove", onDrag);
     window.removeEventListener("mouseup", xxx);
   });
 }
 function onResizeTR(e: MouseEvent) {
   e.preventDefault();
-  maskFlag.value = true;
+  desktopMaskFlag.value = true;
   let T = dragTop(e.pageY, wnd.height, wnd.y);
   let R = dragRight(e.pageX, wnd.width);
   function onDrag(e: MouseEvent) {
@@ -203,14 +239,14 @@ function onResizeTR(e: MouseEvent) {
   }
   window.addEventListener("mousemove", onDrag);
   window.addEventListener("mouseup", function xxx() {
-    maskFlag.value = false;
+    desktopMaskFlag.value = false;
     window.removeEventListener("mousemove", onDrag);
     window.removeEventListener("mouseup", xxx);
   });
 }
 function onResizeBL(e: MouseEvent) {
   e.preventDefault();
-  maskFlag.value = true;
+  desktopMaskFlag.value = true;
   let B = dragBottom(e.pageY, wnd.height);
   let L = dragLeft(e.pageX, wnd.width, wnd.x);
   function onDrag(e: MouseEvent) {
@@ -219,14 +255,14 @@ function onResizeBL(e: MouseEvent) {
   }
   window.addEventListener("mousemove", onDrag);
   window.addEventListener("mouseup", function xxx() {
-    maskFlag.value = false;
+    desktopMaskFlag.value = false;
     window.removeEventListener("mousemove", onDrag);
     window.removeEventListener("mouseup", xxx);
   });
 }
 function onResizeBR(e: MouseEvent) {
   e.preventDefault();
-  maskFlag.value = true;
+  desktopMaskFlag.value = true;
   let B = dragBottom(e.pageY, wnd.height);
   let R = dragRight(e.pageX, wnd.width);
   function onDrag(e: MouseEvent) {
@@ -235,18 +271,20 @@ function onResizeBR(e: MouseEvent) {
   }
   window.addEventListener("mousemove", onDrag);
   window.addEventListener("mouseup", function xxx() {
-    maskFlag.value = false;
+    desktopMaskFlag.value = false;
     window.removeEventListener("mousemove", onDrag);
     window.removeEventListener("mouseup", xxx);
   });
 }
-
-const maskFlag = ref(false);
-provide("maskFlag", maskFlag);
 </script>
 
 <template>
-  <div class="wnd" :class="`--${wnd.mode}`" ref="wndRef" @contextmenu.stop.prevent>
+  <div
+    class="wnd"
+    :class="`--${wnd.mode}`"
+    ref="wndRef"
+    @contextmenu.stop.prevent
+  >
     <div class="controlborder">
       <div class="border-l" @mousedown="onResizeLeft"></div>
       <div class="border-r" @mousedown="onResizeRight"></div>
@@ -295,7 +333,8 @@ provide("maskFlag", maskFlag);
   box-sizing: border-box;
 }
 .--windowed {
-  transform: translateX(v-bind("`${wnd.x}px`")) translateY(v-bind("`${wnd.y}px`"));
+  transform: translateX(v-bind("`${wnd.x}px`"))
+    translateY(v-bind("`${wnd.y}px`"));
 
   width: v-bind("`${wnd.width}px`");
   height: v-bind("`${wnd.height}px`");

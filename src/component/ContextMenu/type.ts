@@ -5,7 +5,7 @@ export interface ActionType {
   checked?: boolean | Ref<boolean>;
   hr?: boolean;
   disable?: boolean | Ref<boolean>;
-  selected?: boolean;
+  selected?: boolean | Ref<boolean>;
 }
 
 export interface MenuType {

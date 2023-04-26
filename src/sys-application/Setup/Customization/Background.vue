@@ -11,7 +11,6 @@ const imgPickerShow = ref(false);
 
 <template>
   <div class="background-panel">
-    <div class="h">背景</div>
     <div class="p">背景类型</div>
     <Selector
       :style="{ width: '300px' }"
@@ -54,4 +53,9 @@ const imgPickerShow = ref(false);
 </template>
 
 <style src="../common.css" scoped></style>
-
+<style scoped>
+.background-panel {
+  height: 100%;
+  overflow: auto;
+}
+</style>

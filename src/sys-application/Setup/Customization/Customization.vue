@@ -9,6 +9,7 @@ const activeIndex = ref("background");
 
 <template>
   <SelectorPanel
+    name="个性化"
     v-model:index="activeIndex"
     class="customization"
     :menuOptions="[

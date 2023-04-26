@@ -111,12 +111,18 @@ watch(
     immediate: true,
   }
 );
-watch(() => desktopState.width,() => {
-  onAutoAlign();
-})
-watch(()=>desktopState.height,()=>{
-  onAutoAlign();
-})
+watch(
+  () => desktopState.width,
+  () => {
+    onAutoAlign();
+  }
+);
+watch(
+  () => desktopState.height,
+  () => {
+    onAutoAlign();
+  }
+);
 // 拖拽图标
 let nowDragIndex: number | undefined;
 let init_x: number;
@@ -178,7 +184,7 @@ function onDoubleClick(
     mode,
   });
 }
-const autoAlignFLag = computed(() => {
+const autoFLag = computed(() => {
   if (desktopState.mode === "auto") return true;
   else return false;
 });
@@ -194,14 +200,14 @@ const panelContextMenu = [
           trigger: () => {
             desktopState.mode = "fixed";
           },
-          selected: desktopState.mode === "fixed",
+          selected: computed(() => desktopState.mode === "fixed"),
         },
         {
           label: "桌面自动大小",
           trigger: () => {
             desktopState.mode = "auto";
           },
-          selected: desktopState.mode === "auto",
+          selected: computed(() => desktopState.mode === "auto"),
           hr: true,
         },
       ],
@@ -210,12 +216,18 @@ const panelContextMenu = [
         trigger: () => {
           onAutoAlign();
         },
-        disable: autoAlignFLag,
+        disable: autoFLag,
       },
       {
         label: "对齐到网格",
-        disable: autoAlignFLag,
+        disable: autoFLag,
         checked: toRef(desktopState, "alignToGrid"),
+        hr: true,
+      },
+      {
+        label: "锁定",
+        disable: autoFLag,
+        checked: toRef(desktopState, "locked"),
         hr: true,
       },
       {

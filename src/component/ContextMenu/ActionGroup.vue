@@ -12,12 +12,17 @@ function onClick(index: number) {
   emit("close");
   activeIndex.value = index;
 }
+function isSelected(index: number, i: ActionType) {
+  if (typeof i.selected === "object") return i.selected.value;
+  else if (index === activeIndex.value) return true;
+  else return false;
+}
 </script>
 
 <template>
   <Action
     v-for="(i, index) in actions"
-    :class="{ '--selected': index === activeIndex }"
+    :class="{ '--selected': isSelected(index, i) }"
     :action="i"
     @click="onClick(index)"
   />

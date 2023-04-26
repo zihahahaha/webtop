@@ -1,40 +1,23 @@
-# vue-project
+# 概念
+## 桌面
+指的是整个界面，包含桌面客户区和任务栏  
+大小可以是固定和自动两种模式，固定模式下大小为用户可设置的固定值，不会随着浏览器视口大小变化，自动模式下大小与浏览器视口大小相同。
 
-This template should help get you started developing with Vue 3 in Vite.
+## 桌面客户区
+指的是桌面除去任务栏的界面，是快捷方式和窗口显示的区域。  
+桌面固定模式下快捷方式排列方式可调整，自动模式下大小不可调整。
 
-## Recommended IDE Setup
+## 任务栏
+是任务按钮显示的区域。 
+任务栏位置，大小可调整。
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+## 任务按钮
+用于控制窗口。
 
-## Type Support for `.vue` Imports in TS
+## 窗口
+每个窗口包含控制框，边框，标题栏，客户区。
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
 
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
-
-1. Disable the built-in TypeScript Extension
-    1) Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-    2) Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Type-Check, Compile and Minify for Production
-
-```sh
-npm run build
-```
+## 远程组件
+每个组件由webtop发送网络请求获取并使用，远程组件应该是一串在顶层作用域返回一个组件选项的js代码。  
+每个远程组件对应一个应用被显示到窗口的客户区中。

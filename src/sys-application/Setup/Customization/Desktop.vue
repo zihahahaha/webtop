@@ -6,7 +6,6 @@ import Selector from "@/component/Selector.vue";
 
 <template>
   <div class="desktop-panel">
-    <div class="h">桌面</div>
     <div class="p">桌面模式</div>
     <Selector
       :style="{ width: '300px' }"

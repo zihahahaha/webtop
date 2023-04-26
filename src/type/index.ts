@@ -1,4 +1,4 @@
-import type { Ref } from "vue";
+import type { Ref, Component } from "vue";
 
 export interface WndBase {
   title: string;
@@ -36,4 +36,14 @@ export interface LinkBase {
   mode?: "windowed" | "maximum";
   x?: number;
   y?: number;
+}
+
+export interface Application {
+  // 默认注册名使用请求时的地址名
+  register_name?: string;
+  appliaction_name: string;
+  detail?: string;
+  icon?: string;
+  singleton: boolean;
+  component: Component;
 }

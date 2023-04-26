@@ -1,19 +1,21 @@
 <script setup lang="ts">
-import { ref, inject, toRef } from "vue";
+import { ref, inject, toRef, computed, provide } from "vue";
+import { thinModeKey, routerRefKey } from "./key";
 import {
   titleKey,
   iconKey,
   titleBarKey,
-  closeKey,
-  minimizeKey,
-  maximizeKey,
-  windowizeKey,
+  closeFunctionKey,
+  minimizeFunctionKey,
+  maximizeFunctionKey,
+  windowizeFunctionKey,
   xKey,
   yKey,
   widthKey,
   heightKey,
   modeKey,
   borderKey,
+  readonlyWidthKey,
 } from "@/key";
 import useTitlebar from "@/hook/use-titlebar";
 import Router from "@/component/Router.vue";
@@ -34,10 +36,10 @@ const wndRef = ref();
 const btnBarRef = ref();
 const routerRef = ref();
 
-const close = inject(closeKey);
-const minimize = inject(minimizeKey);
-const maximize = inject(maximizeKey);
-const windowize = inject(windowizeKey);
+const close = inject(closeFunctionKey);
+const minimize = inject(minimizeFunctionKey);
+const maximize = inject(maximizeFunctionKey);
+const windowize = inject(windowizeFunctionKey);
 
 const x = inject(xKey);
 const y = inject(yKey);
@@ -59,6 +61,15 @@ const onDrag = useTitlebar(
   btnBarRef
 );
 
+const readonlyWidth = inject(readonlyWidthKey);
+const thinMode = computed(() => {
+  if (readonlyWidth!.value < 700 && activeIndex.value !== "category panel")
+    return true;
+  else return false;
+});
+provide(thinModeKey, thinMode);
+provide(routerRefKey, routerRef);
+
 //test
 y!.value = 50;
 width!.value = 800;
@@ -66,7 +77,12 @@ width!.value = 800;
 
 <template>
   <div class="setup" ref="wndRef">
-    <div class="titlebar" @mousedown="onDrag" @dblclick="maximize!()">
+    <div
+      class="titlebar"
+      :class="{ thinmode: thinMode }"
+      @mousedown="onDrag"
+      @dblclick="maximize!()"
+    >
       <div style="display: flex" @dblclick.stop>
         <div class="btn" @click.prevent="routerRef.back()"></div>
       </div>
@@ -147,5 +163,9 @@ width!.value = 800;
   height: 17px;
   margin: 4px 7px;
   background-color: black;
+}
+
+.thinmode {
+  background-color: #e6e6e6;
 }
 </style>
