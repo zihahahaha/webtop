@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { toRef, watch, ref } from "vue";
 import { desktopState } from "@/store";
+import { developerMode } from "@/global";
 import { maskFlag } from "@/global";
 import ContextMenu from "@/component/ContextMenu";
 const length = toRef(desktopState, "taskbarLength");
@@ -116,7 +117,10 @@ function onClick(pos: typeof desktopState.taskbarPos) {
   >
     <div
       class="controlborder"
-      :class="{ '--locked': desktopState.taskbarLock }"
+      :class="[
+        { '--locked': desktopState.taskbarLock },
+        { '--debug': developerMode.boundary },
+      ]"
     >
       <div class="border-t" @mousedown="onResizeTop"></div>
       <div class="border-b" @mousedown="onResizeBottom"></div>
@@ -131,9 +135,12 @@ function onClick(pos: typeof desktopState.taskbarPos) {
 </template>
 
 <style scoped>
+.--debug {
+  --control-border: #7f7f7f !important;
+}
 .taskbar {
   --taskbar: #262626;
-  --control-border: #7f7f7f;
+  --control-border: transparent;
 }
 
 .taskbar {
@@ -198,7 +205,6 @@ function onClick(pos: typeof desktopState.taskbarPos) {
   padding: 7px;
   left: -7px;
   top: -7px;
-  background-color: var(--taskbar);
 }
 
 .border-l {

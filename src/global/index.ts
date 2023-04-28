@@ -1,5 +1,5 @@
 // 便于全局引用，不用修改
-import { ref, computed } from "vue";
+import { ref, computed, reactive } from "vue";
 import { desktopState } from "@/store";
 
 export const maskFlag = ref(false);
@@ -16,4 +16,8 @@ export const height = computed(() => {
   if (desktopState.taskbarPos === "top" || desktopState.taskbarPos === "bottom")
     return desktopState.height - desktopState.taskbarLength;
   else return desktopState.height;
+});
+
+export const developerMode = reactive({
+  boundary: false,
 });

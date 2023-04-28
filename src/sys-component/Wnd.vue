@@ -5,7 +5,6 @@ import {
   resolveComponent,
   provide,
   computed,
-  watch,
   watchEffect,
 } from "vue";
 import type { InjectionKey, Ref } from "vue";
@@ -16,6 +15,7 @@ import {
 } from "@/global";
 import type { WndBase } from "@/type";
 import { desktopState } from "@/store";
+import { developerMode } from "@/global";
 
 const { wnd } = defineProps<{
   wnd: WndBase;
@@ -281,7 +281,7 @@ function onResizeBR(e: MouseEvent) {
 <template>
   <div
     class="wnd"
-    :class="`--${wnd.mode}`"
+    :class="[`--${wnd.mode}`, { '--debug': developerMode.boundary }]"
     ref="wndRef"
     @contextmenu.stop.prevent
   >
@@ -316,26 +316,26 @@ function onResizeBR(e: MouseEvent) {
 </template>
 
 <style scoped>
+.--debug {
+  --control-border: #7f7f7f !important;
+  --control-vertex: #ff7f7f !important;
+}
 .wnd {
-  --wnd: #71ff71;
-  --control-border: #7f7f7f;
-  --control-vertex: #ff7f7f;
-  --titlebar: #00a6ff;
-  --client: #fff23fd1;
+  --control-border: transparent;
+  --control-vertex: transparent;
 }
 .wnd {
   position: absolute;
-  background-color: var(--wnd);
   pointer-events: auto;
   border-style: solid;
   border-width: v-bind("`${borderWidth}px`");
-  border-color: black;
+  border-color: v-bind("desktopState.themeColor");
   box-sizing: border-box;
+  box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.5);
 }
 .--windowed {
   transform: translateX(v-bind("`${wnd.x}px`"))
     translateY(v-bind("`${wnd.y}px`"));
-
   width: v-bind("`${wnd.width}px`");
   height: v-bind("`${wnd.height}px`");
 }
@@ -358,7 +358,6 @@ function onResizeBR(e: MouseEvent) {
   width: calc(100% + v-bind("`${2* borderWidth}px`"));
   height: calc(100% + v-bind("`${2 * borderWidth}px`"));
   padding: 7px;
-  background-color: var(--wnd);
 }
 
 .border-t {
@@ -450,7 +449,7 @@ function onResizeBR(e: MouseEvent) {
   width: 100%;
   height: 25px;
   user-select: none;
-  background-color: var(--titlebar);
+  background-color: v-bind("desktopState.themeColor");
 }
 .title {
   flex: 1;
@@ -475,7 +474,6 @@ function onResizeBR(e: MouseEvent) {
   bottom: 0;
   width: 100%;
   height: calc(100% - v-bind("`${25 * Number(wnd.titleBar.flag) }px`"));
-  background-color: var(--client);
 }
 .mask {
   position: absolute;

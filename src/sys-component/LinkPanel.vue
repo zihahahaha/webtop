@@ -225,7 +225,7 @@ const panelContextMenu = [
         hr: true,
       },
       {
-        label: "锁定",
+        label: "锁定桌面大小",
         disable: autoFLag,
         checked: toRef(desktopState, "locked"),
         hr: true,
@@ -324,7 +324,6 @@ function onVenti() {
 .panel {
   position: absolute;
   overflow: hidden;
-  z-index: 0;
   background-position: center;
 }
 

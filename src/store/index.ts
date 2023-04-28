@@ -25,6 +25,7 @@ interface DesktopState {
   showLinks: boolean;
   alignToGrid: boolean;
   locked: boolean;
+  themeColor: string;
 }
 
 export const desktopState: DesktopState = reactive({
@@ -47,6 +48,7 @@ export const desktopState: DesktopState = reactive({
   showLinks: true,
   alignToGrid: false,
   locked: true,
+  themeColor: "#3c3c3c",
 });
 
 // 桌面图标列表

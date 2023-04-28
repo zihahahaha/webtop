@@ -4,6 +4,7 @@ import SelectorPanel from "../SelectorPanel.vue";
 import Background from "./Background.vue";
 import Taskbar from "./Taskbar.vue";
 import Desktop from "./Desktop.vue";
+import ThemeColor from "./ThemeColor.vue";
 const activeIndex = ref("background");
 </script>
 
@@ -28,11 +29,17 @@ const activeIndex = ref("background");
         icon: '',
         index: 'desktop',
       },
+      {
+        label: '主题色',
+        icon: '',
+        index: 'theme color',
+      },
     ]"
   >
     <Background v-if="activeIndex === 'background'" />
     <Taskbar v-if="activeIndex === 'taskbar'" />
     <Desktop v-if="activeIndex === 'desktop'" />
+    <ThemeColor v-if="activeIndex === 'theme color'" />
   </SelectorPanel>
 </template>
 
