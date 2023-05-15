@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { inject, watch, ref,watchEffect } from "vue";
+import { inject, watch, ref, watchEffect } from "vue";
 import { maskRefKey, widthKey, heightKey, maskFlagKey } from "@/key";
-const props =defineProps<{
+const props = defineProps<{
   title: string;
   show: boolean;
 }>();
@@ -19,7 +19,7 @@ const y = ref(height!.value / 2);
 
 const maskFlag = inject(maskFlagKey);
 watchEffect(() => {
-  maskFlag!.value =  props.show;
+  maskFlag!.value = props.show;
 });
 function onDragStart(e: MouseEvent) {
   e.preventDefault();
@@ -46,7 +46,9 @@ function onDragStart(e: MouseEvent) {
         <div class="title">{{ title }}</div>
         <div class="btn -close" @click="emit('update:show', false)"></div>
       </div>
-      <slot />
+      <div class="client">
+        <slot />
+      </div>
     </div>
   </Teleport>
 </template>
@@ -83,5 +85,11 @@ function onDragStart(e: MouseEvent) {
   height: 17px;
   margin: 4px 7px;
   background-color: black;
+}
+</style>
+
+<style scoped>
+.client {
+  padding-top: 25px;
 }
 </style>

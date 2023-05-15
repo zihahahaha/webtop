@@ -18,17 +18,15 @@ const emit = defineEmits(["update:img", "update:show"]);
     @update:show="(value) => emit('update:show', value)"
     style="width: 300px; height: 200px"
   >
-    <div class="client">
-      <img
-        v-for="i in imgs"
-        :src="i"
-        alt=""
-        @click="
-          emit('update:img', i);
-          emit('update:show', false);
-        "
-      />
-    </div>
+    <img
+      v-for="i in imgs"
+      :src="i"
+      alt=""
+      @click="
+        emit('update:img', i);
+        emit('update:show', false);
+      "
+    />
   </Dialog>
   <div class="img-picker">
     <img
@@ -48,8 +46,5 @@ img {
   width: 70px;
   height: 70px;
   object-fit: contain;
-}
-.client {
-  padding-top: 25px;
 }
 </style>

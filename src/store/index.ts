@@ -9,7 +9,7 @@ interface BackgroundColor {
 interface BackgroundImage {
   value: string;
   positon: string;
-  size: string;
+  size: "contain" | "cover";
 }
 
 interface DesktopState {
